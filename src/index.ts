@@ -22,14 +22,18 @@ export default async function applyTransform(
     if (tsMatch) parser = tsMatch[1]
     else {
       try {
+        const cwd = path.dirname(file)
         /* eslint-disable @typescript-eslint/no-var-requires */
-        const babylon = require(require.resolve('@babel/parser', {
-          paths: [path.dirname(file)],
+        const babel = require(require.resolve('@babel/core', {
+          paths: [cwd],
         }))
         /* eslint-enable @typescript-eslint/no-var-requires */
         parser = {
           parse(code: string): ASTNode {
-            return babylon.parse(code)
+            return babel.parseSync(code, {
+              cwd,
+              filename: file,
+            })
           },
         }
       } catch (error) {
