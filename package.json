@@ -17,7 +17,7 @@
     "build": "babel src --out-dir out --extensions \".js,.ts\" && tsc --emitDeclarationOnly -p ./",
     "build:watch": "nodemon -e js,ts,json --watch src --watch .babelrc.js --exec \"(babel src --out-dir out --extensions '.js,.ts'; exit 0)\"",
     "pretest": "BABEL_ENV=coverage npm run build",
-    "test": "node ./out/test/runTest.js; nyc report; nyc report --reporter=lcov",
+    "test": "rimraf .nyc_output; node ./out/test/runTest.js; nyc report; nyc report --reporter=lcov",
     "codecov": "nyc report --reporter=text-lcov > coverage.lcov; codecov",
     "prepublishOnly": "npm run clean && npm run prettier:check && npm run lint && npm test && npm run build",
     "open:coverage": "open coverage/lcov-report/index.html",
@@ -99,6 +99,7 @@
     "@jedwards1211/commitlint-config": "^1.0.0",
     "@jedwards1211/eslint-config-typescript": "^1.0.0",
     "@types/chai": "^4.2.0",
+    "@types/find-root": "^1.1.1",
     "@types/glob": "^7.1.1",
     "@types/jscodeshift": "^0.6.3",
     "@types/mocha": "^5.2.7",
@@ -130,7 +131,8 @@
     "vscode-test": "^1.2.3"
   },
   "dependencies": {
-    "@babel/runtime": "^7.1.5"
+    "@babel/runtime": "^7.1.5",
+    "find-root": "^1.1.0"
   },
   "peerDependencies": {
     "jscodeshift": "*"
