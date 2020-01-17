@@ -1,26 +1,11 @@
 {
-  "name": "vscode-extension-skeleton",
+  "name": "@vscodeshift/apply-jscodeshift",
   "version": "0.0.0-development",
-  "displayName": "Dude, Where's My Module?",
-  "description": "my personal skeleton for a VSCode extension",
+  "description": "apply jscodeshift to active text editor, passing selected range as options",
   "engines": {
     "vscode": "^1.40.0"
   },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onCommand:extension.helloWorld"
-  ],
-  "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "extension.helloWorld",
-        "title": "Hello World"
-      }
-    ]
-  },
+  "main": "./out/index.js",
   "scripts": {
     "lint": "eslint $npm_package_config_lint",
     "lint:fix": "eslint $npm_package_config_lint",
@@ -34,26 +19,9 @@
     "pretest": "BABEL_ENV=coverage npm run build",
     "test": "node ./out/test/runTest.js; nyc report; nyc report --reporter=lcov",
     "codecov": "nyc report --reporter=text-lcov > coverage.lcov; codecov",
-    "vscode:prepublish": "npm run clean && npm run prettier:check && npm run lint && npm test && npm run build",
+    "prepublishOnly": "npm run clean && npm run prettier:check && npm run lint && npm test && npm run build",
     "open:coverage": "open coverage/lcov-report/index.html",
     "semantic-release": "semantic-release"
-  },
-  "release": {
-    "verifyConditions": [
-      "semantic-release-vsce",
-      "@semantic-release/github"
-    ],
-    "prepare": {
-      "path": "semantic-release-vsce",
-      "packageVsix": "vscode-extension-skeleton.vsix"
-    },
-    "publish": [
-      "semantic-release-vsce",
-      {
-        "path": "@semantic-release/github",
-        "assets": "vscode-extension-skeleton.vsix"
-      }
-    ]
   },
   "config": {
     "lint": "--cache --ext .js,.ts src",
@@ -86,10 +54,7 @@
   },
   "nyc": {
     "include": [
-      "src/**/*.ts"
-    ],
-    "exclude": [
-      "src/**/*.spec.ts"
+      "src/*.ts"
     ],
     "require": [
       "@babel/register"
@@ -99,18 +64,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jedwards1211/vscode-extension-skeleton.git"
+    "url": "https://github.com/vscodeshift/apply-jscodeshift.git"
   },
   "keywords": [
     "vscode",
-    "extension"
+    "jscodeshift"
   ],
   "author": "Andy Edwards",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jedwards1211/vscode-extension-skeleton/issues"
+    "url": "https://github.com/vscodeshift/apply-jscodeshift/issues"
   },
-  "homepage": "https://github.com/jedwards1211/vscode-extension-skeleton#readme",
+  "homepage": "https://github.com/vscodeshift/apply-jscodeshift#readme",
   "devDependencies": {
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.6",
@@ -132,6 +97,7 @@
     "@jedwards1211/eslint-config-typescript": "^1.0.0",
     "@types/chai": "^4.2.0",
     "@types/glob": "^7.1.1",
+    "@types/jscodeshift": "^0.6.3",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.6",
     "@types/vscode": "^1.40.0",
@@ -148,6 +114,7 @@
     "glob": "^7.1.6",
     "husky": "^1.1.4",
     "istanbul": "^0.4.5",
+    "jscodeshift": "^0.7.0",
     "lint-staged": "^8.0.4",
     "mocha": "^6.2.1",
     "nodemon": "^2.0.1",
@@ -156,12 +123,14 @@
     "prettier-eslint": "^8.8.2",
     "rimraf": "^2.6.0",
     "semantic-release": "^15.1.4",
-    "semantic-release-vsce": "^2.2.8",
     "typescript": "^3.7.2",
     "vscode-test": "^1.2.3"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.5"
+  },
+  "peerDependencies": {
+    "jscodeshift": "*"
   },
   "renovate": {
     "extends": [
