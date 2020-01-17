@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
 import * as path from 'path'
 import jscodeshift, { Transform, Options } from 'jscodeshift'
+import { ASTNode } from 'recast'
 
 export default async function applyTransform(
   transform: Transform,
@@ -21,9 +22,16 @@ export default async function applyTransform(
     if (tsMatch) parser = tsMatch[1]
     else {
       try {
-        // check if @babel/core is in installed
-        require.resolve('@babel/core', { paths: [path.dirname(file)] })
-        parser = 'babel'
+        /* eslint-disable @typescript-eslint/no-var-requires */
+        const babylon = require(require.resolve('@babel/parser', {
+          paths: [path.dirname(file)],
+        }))
+        /* eslint-enable @typescript-eslint/no-var-requires */
+        parser = {
+          parse(code: string): ASTNode {
+            return babylon.parse(code)
+          },
+        }
       } catch (error) {
         // ignore
       }

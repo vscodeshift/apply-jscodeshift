@@ -7,7 +7,7 @@ import applyTransform from '../..'
 suite('Extension Test Suite', () => {
   vscode.window.showInformationMessage('Start all tests.')
 
-  test('applyTransform', async function() {
+  test('applyTransform .ts', async function() {
     const document = await vscode.workspace.openTextDocument(
       vscode.Uri.parse('untitled:test.ts')
     )
@@ -27,8 +27,7 @@ suite('Extension Test Suite', () => {
           foo: 2,
         })
         expect(path).to.equal('test.ts')
-        return j
-          .withParser('ts')(source)
+        return j(source)
           .findVariableDeclarators('foo')
           .renameTo('baz')
           .toSource()
