@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
+import * as path from 'path'
 import jscodeshift, { Transform, Options } from 'jscodeshift'
-import findRoot from 'find-root'
 
 export default async function applyTransform(
   transform: Transform,
@@ -20,13 +20,13 @@ export default async function applyTransform(
     const tsMatch = /\.(tsx?)$/.exec(file)
     if (tsMatch) parser = tsMatch[1]
     else {
-      /* eslint-disable @typescript-eslint/no-var-requires */
-      const { dependencies, devDependencies } = require(`${findRoot(
-        file
-      )}/package.json`)
-      /* eslint-enable @typescript-eslint/no-var-requires */
-      const deps = { ...dependencies, ...devDependencies }
-      if ('@babel/core' in deps) parser = 'babel'
+      try {
+        // check if @babel/core is in installed
+        require.resolve('@babel/core', { paths: [path.dirname(file)] })
+        parser = 'babel'
+      } catch (error) {
+        // ignore
+      }
     }
   }
 
