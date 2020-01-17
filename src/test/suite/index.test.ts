@@ -20,16 +20,20 @@ suite('Extension Test Suite', () => {
       document.positionAt(8)
     )
     await applyTransform(
-      ({ path, source }, { j }, { selectionStart, selectionEnd }) => {
-        expect(selectionStart).to.equal(2)
-        expect(selectionEnd).to.equal(8)
+      ({ path, source }, { j }, options) => {
+        expect(options).to.deep.equal({
+          selectionStart: 2,
+          selectionEnd: 8,
+          foo: 2,
+        })
         expect(path).to.equal('test.ts')
         return j
           .withParser('ts')(source)
           .findVariableDeclarators('foo')
           .renameTo('baz')
           .toSource()
-      }
+      },
+      { foo: 2 }
     )
     expect(document.getText()).to.equal(`let baz = 2; let bar = baz;`)
   })

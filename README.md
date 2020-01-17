@@ -8,24 +8,27 @@
 
 apply jscodeshift to active text editor, passing selected range as options
 
-## Quick start
+## `applyTransform(transform, [options])`
 
-```sh
-npx 0-60 clone https://github.com/vscodeshift/apply-jscodeshift.git
+```ts
+import applyTransform from '@vscodeshift/apply-jscodeshift'
 ```
 
-## Tools used
+Applies the given `jscodeshift` transform to the active text editor.
 
-- babel 7
-- typescript
-- mocha
-- chai
-- istanbul
-- nyc
-- eslint
-- prettier
-- husky
-- semantic-release
-- renovate
-- Circle CI
-- Codecov.io
+### Arguments
+
+#### `transform` (`jscodeshift.Transform`, **required**)
+
+The transform to apply.
+
+#### `options` (`jscodeshift.Options`, _optional_)
+
+Options to pass to the transform. By default, `selectionStart`
+and `selectionEnd` will be passed to the transform.
+
+### Returns (`Promise<string | void | null | undefined>`)
+
+A promise that will resolve to the output of the transform
+(which will have also been applied to the active text editor
+if it returns a string)

@@ -1,8 +1,9 @@
 import * as vscode from 'vscode'
-import jscodeshift, { Transform } from 'jscodeshift'
+import jscodeshift, { Transform, Options } from 'jscodeshift'
 
 export default async function applyTransform(
-  transform: Transform
+  transform: Transform,
+  options?: Options
 ): Promise<string | void | null | undefined> {
   const { window } = vscode
   const { activeTextEditor: editor } = window
@@ -28,6 +29,7 @@ export default async function applyTransform(
     {
       selectionStart,
       selectionEnd,
+      ...options,
     }
   )
 
