@@ -24,6 +24,7 @@ export default async function applyTransform(
     const tsMatch = /\.(tsx?)$/.exec(file)
     if (tsMatch) {
       try {
+        // if @babel/preset-typescript is found, try to parse with @babel/core instead of ts/x.
         resolve.sync('@babel/preset-typescript', { basedir: cwd })
       } catch (error) {
         parser = tsMatch[1]
@@ -37,7 +38,11 @@ export default async function applyTransform(
             return babel.parseSync(code, {
               cwd,
               filename: file,
+              // without this, babel won't search upward for a config file
               rootMode: 'upward-optional',
+              // without this, jscodeshift would try to use esprima to tokenize the file,
+              // which may not work
+              parserOpts: { withTokens: true },
             })
           },
         }
