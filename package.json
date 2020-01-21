@@ -99,12 +99,12 @@
     "@jedwards1211/commitlint-config": "^1.0.0",
     "@jedwards1211/eslint-config-typescript": "^1.0.0",
     "@types/chai": "^4.2.0",
-    "@types/find-root": "^1.1.1",
     "@types/fs-extra": "^8.0.1",
     "@types/glob": "^7.1.1",
     "@types/jscodeshift": "^0.6.3",
     "@types/mocha": "^5.2.7",
     "@types/node": "^13.1.8",
+    "@types/resolve": "^1.14.0",
     "@types/vscode": "^1.40.0",
     "babel-eslint": "^10.0.1",
     "babel-plugin-istanbul": "^5.1.0",
@@ -134,7 +134,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.1.5",
-    "find-root": "^1.1.0"
+    "resolve": "^1.14.2"
   },
   "peerDependencies": {
     "jscodeshift": "*"

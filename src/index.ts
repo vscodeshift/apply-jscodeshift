@@ -2,7 +2,7 @@ import * as vscode from 'vscode'
 import * as path from 'path'
 import jscodeshift, { Transform, Options } from 'jscodeshift'
 import { ASTNode } from 'recast'
-import findRoot from 'find-root'
+import resolve from 'resolve'
 
 export default async function applyTransform(
   transform: Transform,
@@ -21,28 +21,17 @@ export default async function applyTransform(
   if (!parser) {
     /* eslint-disable @typescript-eslint/no-var-requires */
     const cwd = path.dirname(file)
-    const root = findRoot(file)
     const tsMatch = /\.(tsx?)$/.exec(file)
     if (tsMatch) {
       try {
-        require(path.resolve(
-          root,
-          'node_modules',
-          '@babel',
-          'preset-typescript'
-        ))
+        resolve.sync('@babel/preset-typescript', { basedir: cwd })
       } catch (error) {
         parser = tsMatch[1]
       }
     }
     if (!parser) {
       try {
-        const babel = require(path.resolve(
-          root,
-          'node_modules',
-          '@babel',
-          'core'
-        ))
+        const babel = require(resolve.sync('@babel/core', { basedir: cwd }))
         parser = {
           parse(code: string): ASTNode {
             return babel.parseSync(code, {
