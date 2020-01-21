@@ -114,7 +114,7 @@ suite('Extension Test Suite', () => {
       },
       { foo: 2 }
     )
-    expect(document.getText()).to.equal(`let baz = 2; let bar = baz;`)
+    expect(document.getText()).to.equal(`let baz = (2: number); let bar = baz;`)
   })
 
   test('applyTransform .ts without babel', async function() {
