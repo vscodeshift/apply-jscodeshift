@@ -6,7 +6,10 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![npm version](https://badge.fury.io/js/%40vscodeshift%2Fapply-jscodeshift.svg)](https://badge.fury.io/js/%40vscodeshift%2Fapply-jscodeshift)
 
-apply jscodeshift to active text editor, passing selected range as options
+apply jscodeshift to active text editor, passing selected range as options.
+
+Tries to intelligently determine the parser. If `@babel/core` is present in the project,
+it will be used along with the project's babel config.
 
 ## `applyTransform(transform, [options])`
 
