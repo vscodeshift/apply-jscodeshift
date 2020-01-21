@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import * as path from 'path'
 import jscodeshift, { Transform, Options } from 'jscodeshift'
 import { ASTNode } from 'recast'
+import findRoot from 'find-root'
 
 export default async function applyTransform(
   transform: Transform,
@@ -18,16 +19,30 @@ export default async function applyTransform(
 
   let parser = options ? options.parser : null
   if (!parser) {
+    /* eslint-disable @typescript-eslint/no-var-requires */
+    const cwd = path.dirname(file)
+    const root = findRoot(file)
     const tsMatch = /\.(tsx?)$/.exec(file)
-    if (tsMatch) parser = tsMatch[1]
-    else {
+    if (tsMatch) {
       try {
-        const cwd = path.dirname(file)
-        /* eslint-disable @typescript-eslint/no-var-requires */
-        const babel = require(require.resolve('@babel/core', {
-          paths: [cwd],
-        }))
-        /* eslint-enable @typescript-eslint/no-var-requires */
+        require(path.resolve(
+          root,
+          'node_modules',
+          '@babel',
+          'preset-typescript'
+        ))
+      } catch (error) {
+        parser = tsMatch[1]
+      }
+    }
+    if (!parser) {
+      try {
+        const babel = require(path.resolve(
+          root,
+          'node_modules',
+          '@babel',
+          'core'
+        ))
         parser = {
           parse(code: string): ASTNode {
             return babel.parseSync(code, {
@@ -40,6 +55,7 @@ export default async function applyTransform(
         // ignore
       }
     }
+    /* eslint-enable @typescript-eslint/no-var-requires */
   }
 
   const j = parser ? jscodeshift.withParser(parser) : jscodeshift
