@@ -42,7 +42,7 @@ export default async function applyTransform(
               rootMode: 'upward-optional',
               // without this, jscodeshift would try to use esprima to tokenize the file,
               // which may not work
-              parserOpts: { withTokens: true },
+              parserOpts: { tokens: true },
             })
           },
         }
