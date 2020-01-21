@@ -37,6 +37,7 @@ export default async function applyTransform(
             return babel.parseSync(code, {
               cwd,
               filename: file,
+              rootMode: 'upward-optional',
             })
           },
         }
