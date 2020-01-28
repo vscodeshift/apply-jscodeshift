@@ -134,7 +134,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.1.5",
-    "resolve": "^1.14.2"
+    "jscodeshift-choose-parser": "^1.0.0"
   },
   "peerDependencies": {
     "jscodeshift": "*"
