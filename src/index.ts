@@ -2,8 +2,12 @@ import * as vscode from 'vscode'
 import jscodeshift, { Transform, Options } from 'jscodeshift'
 import chooseJSCodeshiftParser from 'jscodeshift-choose-parser'
 
+export type AsyncTransform = (
+  ...args: Parameters<Transform>
+) => Promise<ReturnType<Transform>>
+
 export default async function applyTransform(
-  transform: Transform,
+  transform: Transform | AsyncTransform,
   options?: Options
 ): Promise<string | void | null | undefined> {
   const { window } = vscode
@@ -20,7 +24,9 @@ export default async function applyTransform(
 
   const j = parser ? jscodeshift.withParser(parser) : jscodeshift
 
-  const newCode = transform(
+  // we can support both sync and async transforms this way, even though
+  // jscodeshift doesn't
+  const newCode = await transform(
     { path: file, source: code },
     {
       j,
