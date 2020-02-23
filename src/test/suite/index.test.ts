@@ -8,7 +8,9 @@ import { spawn } from 'promisify-child-process'
 import { expect } from 'chai'
 import applyTransform from '../..'
 
-suite('Extension Test Suite', () => {
+suite('Extension Test Suite', function() {
+  this.timeout(60000)
+
   vscode.window.showInformationMessage('Start all tests.')
   const temp = path.join(os.tmpdir(), 'apply-jscodeshift')
 
@@ -73,8 +75,6 @@ suite('Extension Test Suite', () => {
   })
 
   test('applyTransform .js with babel', async function() {
-    this.timeout(60000)
-
     vscode.window.showInformationMessage('creating temp project')
 
     const dir = path.join(temp, 'babel-js')

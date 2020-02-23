@@ -13,49 +13,61 @@ export default async function applyTransform(
   const { window } = vscode
   const { activeTextEditor: editor } = window
   if (!editor) return
-  const code = editor.document.getText()
-  const file = editor.document.fileName
 
-  const selectionStart = editor.document.offsetAt(editor.selection.start)
-  const selectionEnd = editor.document.offsetAt(editor.selection.end)
-
-  let parser = options ? options.parser : null
-  if (!parser) parser = chooseJSCodeshiftParser(file)
-
-  const j = parser ? jscodeshift.withParser(parser) : jscodeshift
-
-  // we can support both sync and async transforms this way, even though
-  // jscodeshift doesn't
-  const newCode = await transform(
-    { path: file, source: code },
+  return await window.withProgress(
     {
-      j,
-      jscodeshift: j,
-      stats: (): void => {
-        // noop
-      },
-      report: (): void => {
-        // noop
-      },
+      location: vscode.ProgressLocation.Notification,
     },
-    {
-      selectionStart,
-      selectionEnd,
-      ...options,
+    async (
+      progress: vscode.Progress<{ increment?: number; message?: string }>
+    ): Promise<string | void | null | undefined> => {
+      progress.report({ message: `Applying ${transform.name}...` })
+
+      const code = editor.document.getText()
+      const file = editor.document.fileName
+
+      const selectionStart = editor.document.offsetAt(editor.selection.start)
+      const selectionEnd = editor.document.offsetAt(editor.selection.end)
+
+      let parser = options ? options.parser : null
+      if (!parser) parser = chooseJSCodeshiftParser(file)
+
+      const j = parser ? jscodeshift.withParser(parser) : jscodeshift
+
+      // we can support both sync and async transforms this way, even though
+      // jscodeshift doesn't
+      const newCode = await transform(
+        { path: file, source: code },
+        {
+          j,
+          jscodeshift: j,
+          stats: (): void => {
+            // noop
+          },
+          report: (): void => {
+            // noop
+          },
+        },
+        {
+          selectionStart,
+          selectionEnd,
+          ...options,
+        }
+      )
+
+      if (newCode && newCode !== code) {
+        await editor.edit(edit =>
+          edit.replace(
+            new vscode.Range(
+              editor.document.positionAt(0),
+              editor.document.positionAt(code.length)
+            ),
+            newCode
+          )
+        )
+      }
+
+      return newCode
     }
   )
-
-  if (newCode && newCode !== code) {
-    await editor.edit(edit =>
-      edit.replace(
-        new vscode.Range(
-          editor.document.positionAt(0),
-          editor.document.positionAt(code.length)
-        ),
-        newCode
-      )
-    )
-  }
-
-  return newCode
 }
