@@ -18,6 +18,7 @@ suite('Extension Test Suite', function() {
     const document = await vscode.workspace.openTextDocument(
       vscode.Uri.parse('untitled:test.ts')
     )
+    expect(document.languageId).to.equal('typescript')
     const editor = await vscode.window.showTextDocument(document)
     await editor.edit(edit =>
       edit.insert(document.positionAt(0), `let foo = 2; let bar = foo;`)
@@ -34,6 +35,37 @@ suite('Extension Test Suite', function() {
           foo: 2,
         })
         expect(path).to.equal('test.ts')
+        return j(source)
+          .findVariableDeclarators('foo')
+          .renameTo('baz')
+          .toSource()
+      },
+      { foo: 2 }
+    )
+    expect(document.getText()).to.equal(`let baz = 2; let bar = baz;`)
+  })
+
+  test('applyTransform .tsx', async function() {
+    const document = await vscode.workspace.openTextDocument(
+      vscode.Uri.parse('untitled:test.tsx')
+    )
+    expect(document.languageId).to.equal('typescriptreact')
+    const editor = await vscode.window.showTextDocument(document)
+    await editor.edit(edit =>
+      edit.insert(document.positionAt(0), `let foo = 2; let bar = foo;`)
+    )
+    editor.selection = new vscode.Selection(
+      document.positionAt(2),
+      document.positionAt(8)
+    )
+    await applyTransform(
+      ({ path, source }, { j }, options) => {
+        expect(options).to.deep.equal({
+          selectionStart: 2,
+          selectionEnd: 8,
+          foo: 2,
+        })
+        expect(path).to.equal('test.tsx')
         return j(source)
           .findVariableDeclarators('foo')
           .renameTo('baz')

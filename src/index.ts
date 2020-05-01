@@ -30,7 +30,18 @@ export default async function applyTransform(
       const selectionEnd = editor.document.offsetAt(editor.selection.end)
 
       let parser = options ? options.parser : null
-      if (!parser) parser = chooseJSCodeshiftParser(file)
+      if (!parser) {
+        switch (editor.document.languageId) {
+          case 'typescript':
+            parser = 'ts'
+            break
+          case 'typescriptreact':
+            parser = 'tsx'
+            break
+          default:
+            parser = chooseJSCodeshiftParser(file)
+        }
+      }
 
       const j = parser ? jscodeshift.withParser(parser) : jscodeshift
 
