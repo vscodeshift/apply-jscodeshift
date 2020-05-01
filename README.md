@@ -9,7 +9,7 @@
 apply jscodeshift to active text editor, passing selected range as options.
 
 Tries to intelligently determine the parser. If `@babel/core` is present in the project,
-it will be used along with the project's babel config.
+it will be used along with the project's babel config (except for ts/x files).
 
 ## `applyTransform(transform, [options])`
 

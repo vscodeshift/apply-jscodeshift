@@ -4962,10 +4962,10 @@ jsbn@~0.1.0:
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
   integrity sha1-peZUwuWi3rXyAdls77yoDA7y9RM=
 
-jscodeshift-choose-parser@^1.0.1:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/jscodeshift-choose-parser/-/jscodeshift-choose-parser-1.0.2.tgz#cbe1f477c25610c57e0bf7aa2340d7d73d7e3b38"
-  integrity sha512-Ede0hUbA6v43n/6rlgCtBCMipWNTu8ldikaXoArtiGJXk9S8f5odjzaP4MgeFDh/a+DQKL+AS1PWcTSu51XL3g==
+jscodeshift-choose-parser@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/jscodeshift-choose-parser/-/jscodeshift-choose-parser-2.0.0.tgz#1001917239515e46690da5a66f3de1fb2bb484fe"
+  integrity sha512-wQKZYoohvYb9g/nYGs6vrzjtaDHN6fm2FtXwOhWpUcHYjyn/MQ+5e84coMnquVKkpXITyb6vjB3XIWoTLzAPzQ==
   dependencies:
     invalidate-require-cache "^1.0.0"
     resolve "^1.15.0"
